@@ -1,43 +1,46 @@
 package com.rikenmaharjan.actorwiki;
 
-
-import android.net.sip.SipSession;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
+import android.support.v7.widget.Toolbar;
+
+import com.rikenmaharjan.actorwiki.BaseStructure.BaseView;
+import com.rikenmaharjan.actorwiki.DependencyInjection.ViewFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.zip.Inflater;
 
-public class ActorViewMVCImpl extends ViewMVC implements ActorViewMVC, ActorListViewAdapter.OnActorClickListener {
+
+public class ActorViewMVCImpl extends BaseView implements ActorViewMVC, ActorListViewAdapter.OnActorClickListener {
 
     //View
 
 
-
-
     private ActorListViewAdapter mActorListViewAdapter;
     private ListView mActorListview;
+    private Toolbar mToolbar;
+    private com.rikenmaharjan.actorwiki.Utils.Toolbar mToolbarView;
 
-    private View mRootView;
 
     private List<Listener> mListeners = new ArrayList<>(1);
 
 
-    public ActorViewMVCImpl(LayoutInflater inflater, ViewGroup parent){
+    public ActorViewMVCImpl(LayoutInflater inflater, @Nullable ViewGroup parent, ViewFactory viewFactory){
 
-        mRootView = inflater.inflate(R.layout.activity_actor_wiki,parent,false);
-
+        View mRootView = inflater.inflate(R.layout.activity_actor_wiki,parent,false);
+        setRootView(mRootView);
 
         mActorListview = findViewById(R.id.listViewActor);
-        mActorListViewAdapter = new ActorListViewAdapter(mRootView.getContext(),this);
+        mActorListViewAdapter = new ActorListViewAdapter(getContext(),this);
         mActorListview.setAdapter(mActorListViewAdapter);
 
-
+        mToolbar = findViewById(R.id.toolbar);
+        mToolbarView = viewFactory.newInstance(com.rikenmaharjan.actorwiki.Utils.Toolbar.class,mToolbar);
+        mToolbarView.setTitle("Friends");
+        mToolbar.addView(mToolbarView.getRootView());
 
 
 
@@ -46,16 +49,16 @@ public class ActorViewMVCImpl extends ViewMVC implements ActorViewMVC, ActorList
 
 
 
-    private <T extends View> T findViewById(int id){
+//    private <T extends  BaseView> T findViewById(int id){
+//
+//        return mRootView.findViewById(id);
+//
+//    }
 
-        return mRootView.findViewById(id);
 
-    }
-
-
-    public View getRootView() {
-        return mRootView;
-    }
+//    public View getRootView() {
+//        return mRootView;
+//    }
 
     public void  registerListener(Listener listener){
 

@@ -1,19 +1,19 @@
 package com.rikenmaharjan.actorwiki;
 
 
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 
 import com.rikenmaharjan.actorwiki.Application.MyApplication;
 import com.rikenmaharjan.actorwiki.BaseStructure.BaseActivity;
+import com.rikenmaharjan.actorwiki.DependencyInjection.ViewFactory;
 import com.rikenmaharjan.actorwiki.Networking.ActorService;
 import com.rikenmaharjan.actorwiki.Networking.NetworkLayer.NetworkFetchActor;
 
 import java.util.List;
 
-import retrofit2.Retrofit;
+import javax.inject.Inject;
 
 
 public class ActorWiki extends BaseActivity implements ActorViewMVC.Listener, NetworkFetchActor.Listener {
@@ -26,7 +26,10 @@ public class ActorWiki extends BaseActivity implements ActorViewMVC.Listener, Ne
 
 //    public ActorService mActorService;
     public ActorViewMVCImpl mActorViewMVCImpl;
-    public NetworkFetchActor mNetworkFetchActor;
+    @Inject NetworkFetchActor mNetworkFetchActor;
+
+    @Inject ViewFactory mViewFactory;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +48,23 @@ public class ActorWiki extends BaseActivity implements ActorViewMVC.Listener, Ne
 
 //        mNetworkFetchActor = new NetworkFetchActor(actorService);
 
-        mNetworkFetchActor = getCompositionRoot().getNetworkFetcherActor();
+//        mNetworkFetchActor = getCompositionRoot().getNetworkFetcherActor();
+
+//        mNetworkFetchActor = mNetworkFetchActor;
+
+
+
+        getCompositionRoot().inject(this);
 
         mNetworkFetchActor.registerListener(this);
 
 
 //        mActorViewMVCImpl = new ActorViewMVCImpl(LayoutInflater.from(this),null);
 
-        mActorViewMVCImpl = getCompositionRoot().getViewMVCFactory().newInstance(ActorViewMVCImpl.class,null);
+//        mActorViewMVCImpl = getCompositionRoot().getViewMVCFactory().newInstance(ActorViewMVCImpl.class,null);
+
+
+        mActorViewMVCImpl = mViewFactory.newInstance(ActorViewMVCImpl.class,null);
 
 
 

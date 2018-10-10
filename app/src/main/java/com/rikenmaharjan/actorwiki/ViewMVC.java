@@ -1,4 +1,8 @@
 package com.rikenmaharjan.actorwiki;
 
-public class ViewMVC {
+import android.view.View;
+
+public interface ViewMVC {
+
+    public View getRootView();
 }

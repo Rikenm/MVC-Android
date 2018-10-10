@@ -7,6 +7,8 @@
     android:orientation="vertical"
     tools:context=".ActorWikiDetail">
 
+    <include layout="@layout/util_toolbar"/>
+
 
     <ImageView
         android:id="@+id/imgView"

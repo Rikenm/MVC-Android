@@ -1,5 +1,6 @@
 package com.rikenmaharjan.actorwiki;
 
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,9 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.rikenmaharjan.actorwiki.BaseStructure.BaseView;
+import com.rikenmaharjan.actorwiki.DependencyInjection.ViewFactory;
+
 import java.util.List;
 
-public class ActorDetailMVCImpl extends ViewMVC implements ActorDetailMVC {
+public class ActorDetailMVCImpl extends BaseView implements ActorDetailMVC {
 
 
     private TextView txtViewFirstName;
@@ -17,12 +21,16 @@ public class ActorDetailMVCImpl extends ViewMVC implements ActorDetailMVC {
     private TextView txtViewCountryName;
     private TextView txtViewAge;
     private ImageView imgView;
-    private View mRootView;
+    private Toolbar mToolbar;
+    private com.rikenmaharjan.actorwiki.Utils.Toolbar mToolbarView;
 
 
-    public ActorDetailMVCImpl(LayoutInflater inflater, ViewGroup parent){
 
-        mRootView = inflater.inflate(R.layout.activity_actor_detail,parent,false);
+    public ActorDetailMVCImpl(LayoutInflater inflater, ViewGroup parent,ViewFactory viewFactory){
+
+        View mRootView = inflater.inflate(R.layout.activity_actor_detail,parent,false);
+
+        setRootView(mRootView);
 
         txtViewFirstName =  findViewById(R.id.txtFirstName);
         txtViewLastName = findViewById(R.id.txtLastName);
@@ -30,17 +38,23 @@ public class ActorDetailMVCImpl extends ViewMVC implements ActorDetailMVC {
         txtViewCountryName = findViewById(R.id.txtCountry);
         imgView = findViewById(R.id.imgView);
 
-        txtViewFirstName.setText("riken");
+
+        //toolbar
+        mToolbar = findViewById(R.id.toolbar);
+        mToolbarView = viewFactory.newInstance(com.rikenmaharjan.actorwiki.Utils.Toolbar.class,mToolbar);
+        mToolbarView.setTitle("Actor");
+        mToolbar.addView(mToolbarView.getRootView());
+
 
 
     }
 
 
-    private <T extends View> T findViewById(int id){
-
-        return mRootView.findViewById(id);
-
-    }
+//    private <T extends View> T findViewById(int id){
+//
+//        return mRootView.findViewById(id);
+//
+//    }
 
 
     @Override
@@ -58,7 +72,7 @@ public class ActorDetailMVCImpl extends ViewMVC implements ActorDetailMVC {
 
     }
 
-    public View getRootView() {
-        return mRootView;
-    }
+//    public View getRootView() {
+//        return mRootView;
+//    }
 }

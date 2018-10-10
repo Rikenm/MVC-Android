@@ -7,18 +7,29 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 
-public class ActorWikiDetail extends AppCompatActivity {
+import com.rikenmaharjan.actorwiki.BaseStructure.BaseActivity;
+import com.rikenmaharjan.actorwiki.DependencyInjection.ViewFactory;
+
+import javax.inject.Inject;
+
+public class ActorWikiDetail extends BaseActivity {
 
 
     //do call using retrofit for image if you want
 
     public ActorDetailMVCImpl mActorDetailMVCImpl;
+    @Inject
+    ViewFactory mViewFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mActorDetailMVCImpl = new ActorDetailMVCImpl(LayoutInflater.from(this),null);
+        getCompositionRoot().inject(this);
+
+
+        mActorDetailMVCImpl = mViewFactory.newInstance(ActorDetailMVCImpl.class,null);
+//        mActorDetailMVCImpl = new ActorDetailMVCImpl(LayoutInflater.from(this),null, mViewFactory);
 
         getDataFromIntent();
 
